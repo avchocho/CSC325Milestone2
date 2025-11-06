@@ -19,8 +19,8 @@ def getconn():
     
 def setup_db(cur):
   # Set up db
-    cur.execute('CREATE DATABASE IF NOT EXISTS roster_db')
-    cur.execute('USE roster_db')
+    cur.execute('CREATE DATABASE IF NOT EXISTS disneyplus_db')
+    cur.execute('USE disneyplus_db')
 
     cur.execute('DROP TABLE IF EXISTS Member;')
     cur.execute('DROP TABLE IF EXISTS Course;')    
