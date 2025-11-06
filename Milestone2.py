@@ -8,31 +8,13 @@ import os
 PLATFORM = os.getenv("DB_PLATFORM", "AWS").upper()
 
 def getconn():
-    if PLATFORM == "GCP":
-        # ----- GCP ONLY -----
-        # install: pip install PyMySQL cloud-sql-python-connector
-        from google.cloud.sql.connector import Connector
-
-        # NOTE: use a raw string for Windows paths to avoid backslash escapes
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\path\to\your-key.json"
-
-        connector = Connector()
-        return connector.connect(
-            "project:region:instance",   # e.g. "csc-ser325:us-central1:db325-instance"
-            "pymysql",
-            user="root",
-            password="your-password",
-            db=None               # or None if you prefer to CREATE first, then USE
-        )
-    else:
-        # ----- AWS ONLY -----
-        # install: pip install PyMySQL
         return pymysql.connect(
-            host="mydb.xxxxxx.us-east-1.rds.amazonaws.com",  # RDS endpoint = host
+            #RDS enpoint = host
+            host="csc325termproject-db.cjww46guy0g5.us-east-2.rds.amazonaws.com",
             port=3306,                                       # MySQL default port
             user="admin",
-            password="your-password",
-            database=None                            # or None if you CREATE first
+            password="Milestone2",
+            #database=None                            # or None if you CREATE first
         )
     
 def setup_db(cur):
