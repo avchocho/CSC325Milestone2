@@ -16,36 +16,89 @@ def getconn():
             password="Milestone2",
             #database=None                            # or None if you CREATE first
         )
-    
+
 def setup_db(cur):
   # Set up db
     cur.execute('CREATE DATABASE IF NOT EXISTS disneyplus_db')
     cur.execute('USE disneyplus_db')
 
-    cur.execute('DROP TABLE IF EXISTS Member;')
-    cur.execute('DROP TABLE IF EXISTS Course;')    
-    cur.execute('DROP TABLE IF EXISTS User;')
-
-
+    cur.execute('DROP TABLE IF EXISTS `Show`;')
+    cur.execute('DROP TABLE IF EXISTS Director;')    
+    cur.execute('DROP TABLE IF EXISTS Actor;')
+    cur.execute('DROP TABLE IF EXISTS Country;')
+    cur.execute('DROP TABLE IF EXISTS Genre;')
+    cur.execute('DROP TABLE IF EXISTS ShowDirector;')    
+    cur.execute('DROP TABLE IF EXISTS ShowActor;')
+    cur.execute('DROP TABLE IF EXISTS ShowCountry;')
+    cur.execute('DROP TABLE IF EXISTS ShowGenre;')    
     
-    cur.execute('''
-        CREATE TABLE User (
-        id     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            name   VARCHAR(20) UNIQUE);
+    # Entity tables
+    cur.execute('''CREATE TABLE `Show` (
+            show_id     VARCHAR(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            title       VARCHAR(300),
+            type        VARCHAR(20),
+            release_year INT(4),
+            rating      VARCHAR(20),
+            duration    VARCHAR(30),
+            date_added  DATE,
+            description VARCHAR(1000);
         ''');
 
-    cur.execute('''CREATE TABLE Course (
-            id     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            title  VARCHAR(20) UNIQUE);
+    cur.execute('''CREATE TABLE Director (
+            director_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            dname       VARCHAR(100);
         ''');
 
-    cur.execute('''CREATE TABLE Member (
-            user_id     INT,
-            course_id   INT,
-            role        INT,
-            FOREIGN KEY(user_id) REFERENCES User(id),
-            FOREIGN KEY(course_id) REFERENCES Course(id),
-            PRIMARY KEY (user_id, course_id)
+    cur.execute('''CREATE TABLE Actor (
+            actor_id    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            aname       VARCHAR(100);
+        ''');
+
+    cur.execute('''CREATE TABLE Country (
+            country_id  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            cname       VARCHAR(100);
+        ''');
+
+    cur.execute('''CREATE TABLE Genre (
+            genre_id    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            gname       VARCHAR(100);
+        ''');
+
+    # Joined Tables
+    cur.execute('''CREATE TABLE ShowDirector (
+            showID      INT NOT NULL,
+            director_id INT NOT NULL,
+
+            FOREIGN KEY(showID) REFERENCES `Show`(show_id),
+            FOREIGN KEY(director_id) REFERENCES Director(director_id),
+            PRIMARY KEY (showID, director_id)
+        );
+        ''')
+    
+    cur.execute('''CREATE TABLE ShowActor (
+            showID      INT NOT NULL,
+            actor_id    INT NOT NULL,
+            FOREIGN KEY(showID) REFERENCES `Show`(show_id),
+            FOREIGN KEY(actor_id) REFERENCES Actor(actor_id),
+            PRIMARY KEY (showID, actor_id)
+        );
+        ''')
+
+    cur.execute('''CREATE TABLE ShowCountry (
+            showID      INT NOT NULL,
+            country_id  INT NOT NULL,
+            FOREIGN KEY(showID) REFERENCES `Show`(show_id),
+            FOREIGN KEY(country_id) REFERENCES Country(country_id),
+            PRIMARY KEY (showID, country_id)
+        );
+        ''')
+    
+    cur.execute('''CREATE TABLE ShowGenre (
+            showID     INT NOT NULL,
+            genre_id   INT NOT NULL,
+            FOREIGN KEY(showID) REFERENCES `Show`(show_id),
+            FOREIGN KEY(genre_id) REFERENCES Genre(genre_id),
+            PRIMARY KEY (showID, genre_id)
         );
         ''')
 
