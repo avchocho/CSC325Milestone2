@@ -22,82 +22,82 @@ def setup_db(cur):
     cur.execute('CREATE DATABASE IF NOT EXISTS disneyplus_db')
     cur.execute('USE disneyplus_db')
 
-    cur.execute('DROP TABLE IF EXISTS `Show`;')
+    cur.execute('DROP TABLE IF EXISTS ShowDirector;') 
+    cur.execute('DROP TABLE IF EXISTS ShowActor;') 
+    cur.execute('DROP TABLE IF EXISTS ShowCountry;') 
+    cur.execute('DROP TABLE IF EXISTS ShowGenre;') 
     cur.execute('DROP TABLE IF EXISTS Director;')    
     cur.execute('DROP TABLE IF EXISTS Actor;')
-    cur.execute('DROP TABLE IF EXISTS Country;')
-    cur.execute('DROP TABLE IF EXISTS Genre;')
-    cur.execute('DROP TABLE IF EXISTS ShowDirector;')    
-    cur.execute('DROP TABLE IF EXISTS ShowActor;')
-    cur.execute('DROP TABLE IF EXISTS ShowCountry;')
-    cur.execute('DROP TABLE IF EXISTS ShowGenre;')    
+    cur.execute('DROP TABLE IF EXISTS Country;') 
+    cur.execute('DROP TABLE IF EXISTS Genre;') 
+    cur.execute('DROP TABLE IF EXISTS `Show`;')
     
     # Entity tables
     cur.execute('''CREATE TABLE `Show` (
-            show_id     VARCHAR(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            show_id     VARCHAR(20) NOT NULL PRIMARY KEY,
             title       VARCHAR(300),
-            type        VARCHAR(20),
+            show_type        VARCHAR(20),
             release_year INT(4),
             rating      VARCHAR(20),
             duration    VARCHAR(30),
-            date_added  DATE,
+            date_added  VARCHAR(70),
             description VARCHAR(1000);
         ''');
 
     cur.execute('''CREATE TABLE Director (
-            director_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
             dname       VARCHAR(100);
         ''');
 
     cur.execute('''CREATE TABLE Actor (
-            actor_id    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
             aname       VARCHAR(100);
         ''');
 
     cur.execute('''CREATE TABLE Country (
-            country_id  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
             cname       VARCHAR(100);
         ''');
 
     cur.execute('''CREATE TABLE Genre (
-            genre_id    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
             gname       VARCHAR(100);
         ''');
 
     # Joined Tables
     cur.execute('''CREATE TABLE ShowDirector (
-            showID      INT NOT NULL,
+            showID      VARCHAR(20) NOT NULL,
             director_id INT NOT NULL,
 
             FOREIGN KEY(showID) REFERENCES `Show`(show_id),
-            FOREIGN KEY(director_id) REFERENCES Director(director_id),
+            FOREIGN KEY(director_id) REFERENCES Director(id),
             PRIMARY KEY (showID, director_id)
         );
         ''')
     
     cur.execute('''CREATE TABLE ShowActor (
-            showID      INT NOT NULL,
+            showID      VARCHAR(20) NOT NULL,
             actor_id    INT NOT NULL,
             FOREIGN KEY(showID) REFERENCES `Show`(show_id),
-            FOREIGN KEY(actor_id) REFERENCES Actor(actor_id),
+            FOREIGN KEY(actor_id) REFERENCES Actor(id),
             PRIMARY KEY (showID, actor_id)
         );
         ''')
 
     cur.execute('''CREATE TABLE ShowCountry (
-            showID      INT NOT NULL,
+            showID      VARCHAR(20) NOT NULL,
             country_id  INT NOT NULL,
             FOREIGN KEY(showID) REFERENCES `Show`(show_id),
-            FOREIGN KEY(country_id) REFERENCES Country(country_id),
+            FOREIGN KEY(country_id) REFERENCES Country(id),
             PRIMARY KEY (showID, country_id)
         );
         ''')
     
     cur.execute('''CREATE TABLE ShowGenre (
-            showID     INT NOT NULL,
+            showID     VARCHAR(20) NOT NULL,
             genre_id   INT NOT NULL,
             FOREIGN KEY(showID) REFERENCES `Show`(show_id),
-            FOREIGN KEY(genre_id) REFERENCES Genre(genre_id),
+            FOREIGN KEY(genre_id) REFERENCES Genre(id),
             PRIMARY KEY (showID, genre_id)
         );
         ''')
